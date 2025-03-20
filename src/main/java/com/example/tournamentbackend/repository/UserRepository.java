@@ -1,4 +1,4 @@
 package com.example.tournamentbackend.repository;
 
-public class UserRepository {
+public interface UserRepository {
 }
