@@ -1,6 +1,5 @@
 package com.example.tournamentbackend.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -18,4 +17,5 @@ public class Team {
     private int goalsConceded;
     private String last5Games;
     private int points;
+    private String photoPath;  // Added for team logo
 }

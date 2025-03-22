@@ -35,14 +35,15 @@ public class TeamRepositoryImpl implements TeamRepository {
                 rs.getInt("goals_scored"),
                 rs.getInt("goals_conceded"),
                 rs.getString("last_5_games"),
-                rs.getInt("points")
+                rs.getInt("points"),
+                rs.getString("photo_path")  // Added for team logo
         );
     }
 
     @Override
     public Team save(Team team) {
-        String sql = "INSERT INTO teams (name, played, wins, draws, losses, goal_difference, goals_scored, goals_conceded, last_5_games, points) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO teams (name, played, wins, draws, losses, goal_difference, goals_scored, goals_conceded, last_5_games, points, photo_path) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -57,6 +58,7 @@ public class TeamRepositoryImpl implements TeamRepository {
             ps.setInt(8, team.getGoalsConceded());
             ps.setString(9, team.getLast5Games());
             ps.setInt(10, team.getPoints());
+            ps.setString(11, team.getPhotoPath());  // Added for team logo
             return ps;
         }, keyHolder);
 
@@ -87,7 +89,7 @@ public class TeamRepositoryImpl implements TeamRepository {
     @Override
     public void update(Team team) {
         String sql = "UPDATE teams SET name = ?, played = ?, wins = ?, draws = ?, losses = ?, " +
-                "goal_difference = ?, goals_scored = ?, goals_conceded = ?, last_5_games = ?, points = ? " +
+                "goal_difference = ?, goals_scored = ?, goals_conceded = ?, last_5_games = ?, points = ?, photo_path = ? " +
                 "WHERE id = ?";
 
         int updated = jdbcTemplate.update(sql,
@@ -101,6 +103,7 @@ public class TeamRepositoryImpl implements TeamRepository {
                 team.getGoalsConceded(),
                 team.getLast5Games(),
                 team.getPoints(),
+                team.getPhotoPath(),  // Added for team logo
                 team.getId()
         );
 

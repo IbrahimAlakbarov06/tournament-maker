@@ -17,8 +17,8 @@ public class Match {
     private Integer homeTeamScore;
     private Integer awayTeamScore;
     private LocalDateTime matchDate;
-    private String status; // SCHEDULED, LIVE, COMPLETED, POSTPONED
-    private String round; // Group stage, Quarterfinal, etc.
+    private String status;
+    private String round;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
