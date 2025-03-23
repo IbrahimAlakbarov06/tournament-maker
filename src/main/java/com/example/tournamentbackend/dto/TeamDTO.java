@@ -19,4 +19,5 @@ public class TeamDTO {
     private int goalsConceded;
     private String last5Games;
     private int points;
+    private String logoPath;
 }

@@ -24,7 +24,6 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public TeamDTO createTeam(TeamDTO teamDTO) {
         Team team = convertToEntity(teamDTO);
-        // Initialize new team with default values
         if (team.getPlayed() == 0) {
             team.setWins(0);
             team.setDraws(0);
@@ -139,6 +138,14 @@ public class TeamServiceImpl implements TeamService {
         teamRepository.update(team);
     }
 
+    @Override
+    public void updateTeamLogo(int teamId, String logoPath) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new ResourceNotFoundException("Team not found with id: " + teamId));
+        team.setLogoPath(logoPath);
+        teamRepository.update(team);
+    }
+
     private TeamDTO convertToDTO(Team team) {
         return new TeamDTO(
                 team.getId(),
@@ -151,7 +158,8 @@ public class TeamServiceImpl implements TeamService {
                 team.getGoalsScored(),
                 team.getGoalsConceded(),
                 team.getLast5Games(),
-                team.getPoints()
+                team.getPoints(),
+                team.getLogoPath()
         );
     }
 
@@ -167,7 +175,8 @@ public class TeamServiceImpl implements TeamService {
                 teamDTO.getGoalsScored(),
                 teamDTO.getGoalsConceded(),
                 teamDTO.getLast5Games(),
-                teamDTO.getPoints()
+                teamDTO.getPoints(),
+                teamDTO.getLogoPath()
         );
     }
 }

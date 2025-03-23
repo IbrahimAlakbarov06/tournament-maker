@@ -19,6 +19,7 @@ import java.util.Optional;
 public class TeamRepositoryImpl implements TeamRepository {
 
     private final JdbcTemplate jdbcTemplate;
+    //RowMapper-sql sorgusundan qaytarilan her bir setri goturub onu bir Java obyektine cevirir
     private final RowMapper<Team> teamRowMapper;
 
     @Autowired
@@ -35,14 +36,17 @@ public class TeamRepositoryImpl implements TeamRepository {
                 rs.getInt("goals_scored"),
                 rs.getInt("goals_conceded"),
                 rs.getString("last_5_games"),
-                rs.getInt("points")
+                rs.getInt("points"),
+                rs.getString("logo_path")
         );
     }
 
     @Override
     public Team save(Team team) {
-        String sql = "INSERT INTO teams (name, played, wins, draws, losses, goal_difference, goals_scored, goals_conceded, last_5_games, points) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO teams (name, played, wins, draws, losses, goal_difference, goals_scored, goals_conceded, last_5_games, points, logo_path) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        //Keyholder bir magazada en esas acarlara sahib olan iscidir,tehlukesizlk
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -57,12 +61,39 @@ public class TeamRepositoryImpl implements TeamRepository {
             ps.setInt(8, team.getGoalsConceded());
             ps.setString(9, team.getLast5Games());
             ps.setInt(10, team.getPoints());
+            ps.setString(11, team.getLogoPath());
             return ps;
         }, keyHolder);
 
         int id = ((Number) keyHolder.getKeys().get("id")).intValue();
         team.setId(id);
         return findById(id).orElseThrow(() -> new ResourceNotFoundException("Team not found with id: " + id));
+    }
+
+    @Override
+    public void update(Team team) {
+        String sql = "UPDATE teams SET name = ?, played = ?, wins = ?, draws = ?, losses = ?, " +
+                "goal_difference = ?, goals_scored = ?, goals_conceded = ?, last_5_games = ?, points = ?, logo_path = ? " +
+                "WHERE id = ?";
+
+        int updated = jdbcTemplate.update(sql,
+                team.getName(),
+                team.getPlayed(),
+                team.getWins(),
+                team.getDraws(),
+                team.getLosses(),
+                team.getGoalDifference(),
+                team.getGoalsScored(),
+                team.getGoalsConceded(),
+                team.getLast5Games(),
+                team.getPoints(),
+                team.getLogoPath(),
+                team.getId()
+        );
+
+        if (updated == 0) {
+            throw new ResourceNotFoundException("Team not found with id: " + team.getId());
+        }
     }
 
     @Override
@@ -84,30 +115,6 @@ public class TeamRepositoryImpl implements TeamRepository {
         return jdbcTemplate.query("SELECT * FROM teams ORDER BY points DESC, goal_difference DESC", teamRowMapper);
     }
 
-    @Override
-    public void update(Team team) {
-        String sql = "UPDATE teams SET name = ?, played = ?, wins = ?, draws = ?, losses = ?, " +
-                "goal_difference = ?, goals_scored = ?, goals_conceded = ?, last_5_games = ?, points = ? " +
-                "WHERE id = ?";
-
-        int updated = jdbcTemplate.update(sql,
-                team.getName(),
-                team.getPlayed(),
-                team.getWins(),
-                team.getDraws(),
-                team.getLosses(),
-                team.getGoalDifference(),
-                team.getGoalsScored(),
-                team.getGoalsConceded(),
-                team.getLast5Games(),
-                team.getPoints(),
-                team.getId()
-        );
-
-        if (updated == 0) {
-            throw new ResourceNotFoundException("Team not found with id: " + team.getId());
-        }
-    }
 
     @Override
     public void deleteById(int id) {

@@ -2,9 +2,11 @@ package com.example.tournamentbackend.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Team {
     private int id;
     private String name;
@@ -17,4 +19,5 @@ public class Team {
     private int goalsConceded;
     private String last5Games;
     private int points;
+    private String logoPath;
 }
