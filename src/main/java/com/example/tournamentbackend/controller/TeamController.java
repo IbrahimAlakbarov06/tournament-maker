@@ -4,6 +4,9 @@ import com.example.tournamentbackend.dto.TeamDTO;
 import com.example.tournamentbackend.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,9 +46,10 @@ public class TeamController {
             @RequestPart("team") TeamDTO teamDTO,
             @RequestPart(value = "logo", required = false) MultipartFile logo) {
 
+        // In your createTeamWithLogo method
         if (logo != null && !logo.isEmpty()) {
-            String photoPath = saveLogoFile(logo);
-            teamDTO.setPhotoPath(photoPath);
+            String filename = saveLogoFile(logo);
+            teamDTO.setPhotoPath(filename);
         }
 
         TeamDTO createdTeam = teamService.createTeam(teamDTO);
@@ -134,6 +138,31 @@ public class TeamController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/team-images/{filename}")
+    public ResponseEntity<Resource> getTeamImage(@PathVariable String filename) throws IOException {
+        Path imagePath = Paths.get(uploadDir).resolve(filename);
+        Resource resource = new UrlResource(imagePath.toUri());
+
+        if (resource.exists() && resource.isReadable()) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(resource);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    private MediaType determineMediaType(String filename) {
+        if (filename.toLowerCase().endsWith(".jpg") || filename.toLowerCase().endsWith(".jpeg")) {
+            return MediaType.IMAGE_JPEG;
+        } else if (filename.toLowerCase().endsWith(".png")) {
+            return MediaType.IMAGE_PNG;
+        } else if (filename.toLowerCase().endsWith(".gif")) {
+            return MediaType.IMAGE_GIF;
+        }
+        return MediaType.APPLICATION_OCTET_STREAM;
+    }
+
     private String saveLogoFile(MultipartFile logo) {
         try {
             // Create the upload directory if it doesn't exist
@@ -154,8 +183,8 @@ public class TeamController {
             Path path = Paths.get(uploadDir, uniqueFilename);
             Files.write(path, logo.getBytes());
 
-            // Return the relative path to be stored in database
-            return "/images/teams/" + uniqueFilename;
+            // Return just the filename to be stored in database
+            return "/uploads/images/teams/" + uniqueFilename;
         } catch (IOException e) {
             throw new RuntimeException("Failed to save logo: " + e.getMessage());
         }

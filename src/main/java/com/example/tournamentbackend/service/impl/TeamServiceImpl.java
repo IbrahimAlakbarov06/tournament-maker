@@ -35,7 +35,6 @@ public class TeamServiceImpl implements TeamService {
             team.setLast5Games("");
             team.setPoints(0);
         }
-        // If no photo path is provided, set a default
         if (team.getPhotoPath() == null || team.getPhotoPath().isEmpty()) {
             team.setPhotoPath("/images/teams/default-logo.png");
         }
