@@ -138,14 +138,14 @@ public class TeamController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/team-images/{filename}")
+    @GetMapping("/images/teams/{filename}")
     public ResponseEntity<Resource> getTeamImage(@PathVariable String filename) throws IOException {
-        Path imagePath = Paths.get(uploadDir).resolve(filename);
+        Path imagePath = Paths.get(uploadDir, "images", "teams", filename);
         Resource resource = new UrlResource(imagePath.toUri());
 
         if (resource.exists() && resource.isReadable()) {
             return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_JPEG)
+                    .contentType(determineMediaType(filename))
                     .body(resource);
         } else {
             return ResponseEntity.notFound().build();
@@ -166,7 +166,7 @@ public class TeamController {
     private String saveLogoFile(MultipartFile logo) {
         try {
             // Create the upload directory if it doesn't exist
-            File directory = new File(uploadDir);
+            File directory = new File(uploadDir + "/images/teams");
             if (!directory.exists()) {
                 directory.mkdirs();
             }
@@ -180,11 +180,11 @@ public class TeamController {
             String uniqueFilename = UUID.randomUUID().toString() + fileExtension;
 
             // Save the file
-            Path path = Paths.get(uploadDir, uniqueFilename);
+            Path path = Paths.get(uploadDir, "images", "teams", uniqueFilename);
             Files.write(path, logo.getBytes());
 
             // Return just the filename to be stored in database
-            return "/uploads/images/teams/" + uniqueFilename;
+            return "/images/teams/" + uniqueFilename;
         } catch (IOException e) {
             throw new RuntimeException("Failed to save logo: " + e.getMessage());
         }
