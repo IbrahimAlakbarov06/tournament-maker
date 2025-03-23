@@ -35,9 +35,6 @@ public class TeamServiceImpl implements TeamService {
             team.setLast5Games("");
             team.setPoints(0);
         }
-        if (team.getPhotoPath() == null || team.getPhotoPath().isEmpty()) {
-            team.setPhotoPath("/images/teams/default-logo.png");
-        }
         Team savedTeam = teamRepository.save(team);
         return convertToDTO(savedTeam);
     }
@@ -71,7 +68,6 @@ public class TeamServiceImpl implements TeamService {
         existingTeam.setGoalsConceded(teamDTO.getGoalsConceded());
         existingTeam.setLast5Games(teamDTO.getLast5Games());
         existingTeam.setPoints(teamDTO.getPoints());
-        existingTeam.setPhotoPath(teamDTO.getPhotoPath());  // Added for team logo
 
         teamRepository.update(existingTeam);
         return convertToDTO(existingTeam);
@@ -155,8 +151,7 @@ public class TeamServiceImpl implements TeamService {
                 team.getGoalsScored(),
                 team.getGoalsConceded(),
                 team.getLast5Games(),
-                team.getPoints(),
-                team.getPhotoPath()  // Added for team logo
+                team.getPoints()
         );
     }
 
@@ -172,8 +167,7 @@ public class TeamServiceImpl implements TeamService {
                 teamDTO.getGoalsScored(),
                 teamDTO.getGoalsConceded(),
                 teamDTO.getLast5Games(),
-                teamDTO.getPoints(),
-                teamDTO.getPhotoPath()  // Added for team logo
+                teamDTO.getPoints()
         );
     }
 }

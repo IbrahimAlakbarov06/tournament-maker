@@ -17,5 +17,4 @@ public class Team {
     private int goalsConceded;
     private String last5Games;
     private int points;
-    private String photoPath;  // Added for team logo
 }
