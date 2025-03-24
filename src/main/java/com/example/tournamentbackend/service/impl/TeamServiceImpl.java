@@ -3,7 +3,7 @@ package com.example.tournamentbackend.service.impl;
 import com.example.tournamentbackend.dto.TeamDTO;
 import com.example.tournamentbackend.exception.ResourceNotFoundException;
 import com.example.tournamentbackend.model.Team;
-import com.example.tournamentbackend.repository.TeamRepository;
+import com.example.tournamentbackend.dao.TeamDao;
 import com.example.tournamentbackend.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 @Service
 public class TeamServiceImpl implements TeamService {
 
-    private final TeamRepository teamRepository;
+    private final TeamDao teamRepository;
 
     @Autowired
-    public TeamServiceImpl(TeamRepository teamRepository) {
+    public TeamServiceImpl(TeamDao teamRepository) {
         this.teamRepository = teamRepository;
     }
 

@@ -3,9 +3,8 @@ package com.example.tournamentbackend.service.impl;
 import com.example.tournamentbackend.dto.MatchDTO;
 import com.example.tournamentbackend.exception.ResourceNotFoundException;
 import com.example.tournamentbackend.model.Match;
-import com.example.tournamentbackend.model.Team;
-import com.example.tournamentbackend.repository.MatchRepository;
-import com.example.tournamentbackend.repository.TeamRepository;
+import com.example.tournamentbackend.dao.MatchDao;
+import com.example.tournamentbackend.dao.TeamDao;
 import com.example.tournamentbackend.service.MatchService;
 import com.example.tournamentbackend.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +18,12 @@ import java.util.stream.Collectors;
 @Service
 public class MatchServiceImpl implements MatchService {
 
-    private final MatchRepository matchRepository;
-    private final TeamRepository teamRepository;
+    private final MatchDao matchRepository;
+    private final TeamDao teamRepository;
     private final TeamService teamService;
 
     @Autowired
-    public MatchServiceImpl(MatchRepository matchRepository, TeamRepository teamRepository, TeamService teamService) {
+    public MatchServiceImpl(MatchDao matchRepository, TeamDao teamRepository, TeamService teamService) {
         this.matchRepository = matchRepository;
         this.teamRepository = teamRepository;
         this.teamService = teamService;

@@ -3,7 +3,7 @@ package com.example.tournamentbackend.service.impl;
 import com.example.tournamentbackend.dto.TournamentDTO;
 import com.example.tournamentbackend.exception.ResourceNotFoundException;
 import com.example.tournamentbackend.model.Tournament;
-import com.example.tournamentbackend.repository.TournamentRepository;
+import com.example.tournamentbackend.dao.TournamentDao;
 import com.example.tournamentbackend.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 @Service
 public class TournamentServiceImpl implements TournamentService {
 
-    private final TournamentRepository tournamentRepository;
+    private final TournamentDao tournamentRepository;
 
     @Autowired
-    public TournamentServiceImpl(TournamentRepository tournamentRepository) {
+    public TournamentServiceImpl(TournamentDao tournamentRepository) {
         this.tournamentRepository = tournamentRepository;
     }
 

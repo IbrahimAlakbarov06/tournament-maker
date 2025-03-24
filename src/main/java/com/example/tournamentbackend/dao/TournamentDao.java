@@ -1,11 +1,11 @@
-package com.example.tournamentbackend.repository;
+package com.example.tournamentbackend.dao;
 
 import com.example.tournamentbackend.model.Tournament;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface TournamentRepository {
+public interface TournamentDao {
     Tournament save(Tournament tournament);
     Optional<Tournament> findById(Long id);
     List<Tournament> findAll();

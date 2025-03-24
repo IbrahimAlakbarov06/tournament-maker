@@ -1,11 +1,11 @@
-package com.example.tournamentbackend.repository;
+package com.example.tournamentbackend.dao;
 
 import com.example.tournamentbackend.model.Match;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface MatchRepository {
+public interface MatchDao {
     Match save(Match match);
     Optional<Match> findById(Long id);
     List<Match> findAll();

@@ -4,7 +4,6 @@ import com.example.tournamentbackend.dto.TeamDTO;
 import com.example.tournamentbackend.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -122,7 +120,6 @@ public class TeamController {
         }
     }
 
-    // Endpoint to get team logo
     @GetMapping("/{teamId}/logo")
     public ResponseEntity<Resource> getTeamLogo(@PathVariable int teamId) {
         try {
@@ -147,5 +144,4 @@ public class TeamController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 }
