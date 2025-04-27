@@ -4,7 +4,6 @@ import com.example.tournamentbackend.dto.TeamDTO;
 import java.util.List;
 
 public interface TeamService {
-    // Existing methods...
 
     TeamDTO createTeam(TeamDTO teamDTO);
     TeamDTO getTeamById(int id);
@@ -15,7 +14,5 @@ public interface TeamService {
     void addTeamToTournament(int teamId, Long tournamentId);
     void removeTeamFromTournament(int teamId, Long tournamentId);
     void updateTeamStats(int teamId, int goalsScored, int goalsConceded, String result);
-
-    // New method for updating team logo
     void updateTeamLogo(int teamId, String logoPath);
 }

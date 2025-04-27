@@ -161,7 +161,6 @@ public class TournamentDaoImpl implements TournamentDao {
         if (updatedAt != null) {
             tournament.setUpdatedAt(updatedAt.toLocalDateTime());
         }
-
         return tournament;
     }
 }

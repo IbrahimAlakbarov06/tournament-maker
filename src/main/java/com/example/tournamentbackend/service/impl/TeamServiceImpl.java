@@ -86,7 +86,6 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public void addTeamToTournament(int teamId, Long tournamentId) {
-        // Check if team exists
         teamRepository.findById(teamId)
                 .orElseThrow(() -> new ResourceNotFoundException("Team not found with id: " + teamId));
 
@@ -103,13 +102,11 @@ public class TeamServiceImpl implements TeamService {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new ResourceNotFoundException("Team not found with id: " + teamId));
 
-        // Update team statistics
         team.setPlayed(team.getPlayed() + 1);
         team.setGoalsScored(team.getGoalsScored() + goalsScored);
         team.setGoalsConceded(team.getGoalsConceded() + goalsConceded);
         team.setGoalDifference(team.getGoalsScored() - team.getGoalsConceded());
 
-        // Update wins, draws, losses, points and last 5 games
         String last5Games = team.getLast5Games();
         if (last5Games.length() >= 5) {
             last5Games = last5Games.substring(1);

@@ -80,7 +80,6 @@ public class MatchServiceImpl implements MatchService {
         Match existingMatch = matchRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Match not found with id: " + id));
 
-        // Validate that teams exist
         verifyTeamExists(matchDTO.getHomeTeamId());
         verifyTeamExists(matchDTO.getAwayTeamId());
 
@@ -91,7 +90,6 @@ public class MatchServiceImpl implements MatchService {
         existingMatch.setRound(matchDTO.getRound());
         existingMatch.setStatus(matchDTO.getStatus());
 
-        // Only update scores if they are provided and match is completed
         if (matchDTO.getHomeTeamScore() != null && matchDTO.getAwayTeamScore() != null) {
             existingMatch.setHomeTeamScore(matchDTO.getHomeTeamScore());
             existingMatch.setAwayTeamScore(matchDTO.getAwayTeamScore());
@@ -112,13 +110,11 @@ public class MatchServiceImpl implements MatchService {
         Match match = matchRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Match not found with id: " + id));
 
-        // Update match scores and status
         match.setHomeTeamScore(homeTeamScore);
         match.setAwayTeamScore(awayTeamScore);
         match.setStatus("completed");
         matchRepository.update(match);
 
-        // Update team statistics
         updateTeamStats(match);
 
         return enrichMatchDTO(convertToDTO(match));
@@ -130,7 +126,6 @@ public class MatchServiceImpl implements MatchService {
         int homeScore = match.getHomeTeamScore();
         int awayScore = match.getAwayTeamScore();
 
-        // Determine the result for each team
         String homeResult;
         String awayResult;
 
@@ -145,7 +140,6 @@ public class MatchServiceImpl implements MatchService {
             awayResult = "D";
         }
 
-        // Update both teams' statistics
         teamService.updateTeamStats(homeTeamId, homeScore, awayScore, homeResult);
         teamService.updateTeamStats(awayTeamId, awayScore, homeScore, awayResult);
     }
@@ -166,8 +160,8 @@ public class MatchServiceImpl implements MatchService {
                 match.getMatchDate(),
                 match.getStatus(),
                 match.getRound(),
-                null, // homeTeamName to be set in enrichMatchDTO
-                null  // awayTeamName to be set in enrichMatchDTO
+                null,
+                null
         );
     }
 
@@ -186,7 +180,6 @@ public class MatchServiceImpl implements MatchService {
     }
 
     private MatchDTO enrichMatchDTO(MatchDTO matchDTO) {
-        // Add team names to the DTO for convenience
         teamRepository.findById(matchDTO.getHomeTeamId())
                 .ifPresent(team -> matchDTO.setHomeTeamName(team.getName()));
 

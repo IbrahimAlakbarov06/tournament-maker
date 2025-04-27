@@ -19,6 +19,6 @@ public class MatchDTO {
     private LocalDateTime matchDate;
     private String status;
     private String round;
-    private String homeTeamName; // For convenience in the frontend
-    private String awayTeamName; // For convenience in the frontend
+    private String homeTeamName;
+    private String awayTeamName;
 }

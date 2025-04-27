@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -95,20 +94,16 @@ public class TeamController {
 
             teamService.getTeamById(teamId);
 
-            // Create upload directory if it doesn't exist
             Path uploadPath = Paths.get(uploadDir);
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
 
-            // Generate unique filename
             String filename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
             Path filePath = uploadPath.resolve(filename);
 
-            // Save the file
             Files.copy(file.getInputStream(), filePath);
 
-            // Update the team with the logo path
             String logoPath = filename;
             teamService.updateTeamLogo(teamId, logoPath);
 
@@ -134,7 +129,7 @@ public class TeamController {
 
             if (resource.exists()) {
                 return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_JPEG) // You may need to detect the actual content type
+                        .contentType(MediaType.IMAGE_JPEG)
                         .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
                         .body(resource);
             } else {
